@@ -7,7 +7,7 @@ import cv2
 class Pasport:
     def __init__(self):
         self.__reader = easyocr.Reader(['ru'])
-        self.__model = YOLO("RUpassport/pasport_model.pt")
+        self.__model = YOLO(os.path.abspath("pasport_model.pt"))
 
     def recognize_pasport(self, img: str, id: str):
         """
