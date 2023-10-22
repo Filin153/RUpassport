@@ -18,9 +18,9 @@ class Pasport:
         self.__model(img, retina_masks=True, save_crop=True, project="file", name=id)
 
         info = {}
-        for dir in os.listdir(f"file/123/crops"):
+        for dir in os.listdir(f"file/{id}/crops"):
             if dir != "pass-ort":
-                info[dir] = f"file/123/crops/{dir}/" + os.listdir(f"file/123/crops/{dir}/")[0]
+                info[dir] = f"file/{id}/crops/{dir}/" + os.listdir(f"file/123/crops/{dir}/")[0]
 
         img = cv2.imread(info["num"])
         img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
