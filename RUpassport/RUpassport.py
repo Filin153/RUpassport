@@ -3,6 +3,7 @@ from ultralytics import YOLO
 import easyocr
 import shutil
 import cv2
+import re
 
 class Pasport:
     def __init__(self):
@@ -11,7 +12,7 @@ class Pasport:
         model_file_path = os.path.join(module_dir, 'pasport_model.pt')
         self.__model = YOLO(model_file_path)
 
-    def recognize_pasport(self, img: str, main_folder: str, folder_id: str):
+    def recognize_pasport(self, img, main_folder, folder_id: str) -> dict:
         """
         :param img: path to passport img
         :param main_folder: An intermediate folder for storing recognized photos, after returning the data is deleted
@@ -32,8 +33,20 @@ class Pasport:
         img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
         cv2.imwrite(info["ser"], img)
 
+
         for i in info.keys():
             info[i] = "".join(self.__reader.readtext(info[i], detail=0)).lower().capitalize()
 
+        info['date'] = self.made_date(info['data'])
+        info['out_date'] = self.made_date(info['out_data'])
+        info.pop('data')
+        info.pop('out_data')
+
+
         shutil.rmtree(f"{main_folder}/{folder_id}")
         return info
+
+    @staticmethod
+    def made_date(line: str) -> str:
+        line = re.sub(r"[\D]", "", line)
+        return f"{line[:2]}.{line[2:4]}.{line[4:]}"
