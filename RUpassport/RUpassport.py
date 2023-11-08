@@ -43,11 +43,11 @@ class Pasport:
             info.pop('data')
             info.pop('out_data')
 
-
-            shutil.rmtree(f"{main_folder}/{folder_id}")
             return info
         except Exception:
             return {}
+        finally:
+            shutil.rmtree(f"{main_folder}/{folder_id}")
 
     @staticmethod
     def made_date(line: str) -> str:
